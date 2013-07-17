@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="Emulate the logic of a lift."/>
+	<meta name="author" content="James Alexander Lee"/>
+	<title>Lift Logic</title>
+</head>
+<body>
+	<h1>Lift Logic</h1>
+	<p>Fed up with the lifts at work, I wanted to see how difficult it is to programme the logic of a lift.</p>
+	<p>Open console</p>
+
+	<hr>
+
+	<p>Current floor: <span id="currentFloor"></span></p>
+
+	<button class="liftButton">1</button>
+	<button class="liftButton">2</button>
+	<button class="liftButton">3</button>
+	<button class="liftButton">4</button>
+	<button class="liftButton">5</button>
+	<button class="liftButton">6</button>
+	<button class="liftButton">7</button>
+	<button class="liftButton">8</button>
+	<button class="liftButton">9</button>
+	<button class="liftButton">10</button>
+
+	<script>
+		function Lift(currentFloor, requests, waitTimeout) {
+			// Lift properties
+			this.direction        = 'stationary';	// stationary/up/down
+			this.currentFloor     = currentFloor;
+			this.destinationFloor = null;
+			// this.requests         = requests;	// array of floor requests (inside/outside)
+			this.speed            = 1000;
+			this.waitTimeout      = waitTimeout;	// time to wait before returning to floor 1
+		}
+
+		Lift.prototype.getLiftStatus = function() {
+			console.log('---GET LIFT STATUS---');
+			console.log('Direction: ' + this.direction);
+			// console.log('Requests: ' + this.requests);
+			console.log('Wait timeout: ' + this.waitTimeout);
+			console.log('Current floor: ' + this.currentFloor);
+			console.log('Destination floor: ' + this.destinationFloor);
+
+			var currentFloorLabel = document.getElementById('currentFloor');
+			currentFloorLabel.innerHTML = this.currentFloor;
+		}
+
+		Lift.prototype.pressButton = function(e) {
+			lift1.destinationFloor = e.target.innerHTML;
+			console.log('---BUTTON ' + lift1.destinationFloor + ' PRESSED---');
+			// this.origin = origin;	// inside/outside
+			// console.log('---BUTTON ' + floor + ' PRESSED FROM THE ' + origin + '---');
+
+			lift1.moveLift();
+		}
+
+		Lift.prototype.moveLift = function() {
+			console.log('MOVING LIFT TO FLOOR: ' + this.destinationFloor);
+
+			/*this.getDirection();
+
+			var timer = setInterval(function() {			// doesn't work
+				if(lift1.direction == 'stationary') {
+					clearInterval(timer);
+				} else {
+					if(lift1.direction == 'up') {
+						lift1.currentFloor++;
+						console.log(lift1.currentFloor);
+					} else if(lift1.direction == 'down') {
+						lift1.currentFloor--;
+						console.log(lift1.currentFloor);
+					}
+					lift1.getDirection();
+					lift1.getLiftStatus();
+				}
+			}, this.speed);*/
+
+			do {
+				this.getDirection();
+				// setTimeout(function() {			// while and setTimeout doesn't play nicely together
+					if(this.direction == 'up') {
+						sleep(this.speed);			// blocks UI
+						this.currentFloor++;
+						console.log(this.currentFloor);
+					} else if(this.direction == 'down') {
+						sleep(this.speed);
+						this.currentFloor--;
+						console.log(this.currentFloor);
+					}
+				// }, this.speed);
+			} while(this.direction != 'stationary');
+
+			this.direction = 'stationary';
+			console.log('---LIFT ARRIVED---');
+			this.getLiftStatus();
+			this.liftWaiting();
+		}
+
+		Lift.prototype.getDirection = function() {
+			if(this.destinationFloor == this.currentFloor) {
+				this.direction = 'stationary';
+			} else if(this.destinationFloor > this.currentFloor) {
+				this.direction = 'up';
+			} else if(this.destinationFloor < this.currentFloor) {
+				this.direction = 'down';
+			}
+			console.log('---LIFT IS MOVING ' + this.direction + '---');
+		}
+
+		Lift.prototype.liftWaiting = function() {
+			if(this.destinationFloor != 1) {
+				setTimeout(function() {
+					console.log('---WAIT TIMEOUT REACHED. LIFT RETURNING TO FLOOR 1---');
+					lift1.destinationFloor = 1;
+					lift1.moveLift();
+				}, this.waitTimeout);
+			}
+		}
+
+		sleep = function(milliseconds) {
+			var start = new Date().getTime();
+			while((new Date().getTime() - start) < milliseconds) {
+				// do nothing
+			}
+		}
+
+
+
+		console.log('---INITIALISE LIFT---');
+		var lift1 = new Lift(1, [], 10000);
+		lift1.getLiftStatus();
+
+		var liftButtons = document.querySelectorAll('.liftButton');
+		for(var i = 0; i < liftButtons.length; i++) {
+			liftButtons[i].addEventListener("click", lift1.pressButton, false);
+		}
+	</script>
+</body>
+</html>
