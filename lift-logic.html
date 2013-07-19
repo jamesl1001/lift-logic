@@ -28,86 +28,81 @@
 
 	<script>
 		function Lift(currentFloor, requests, waitTimeout) {
+			self = this;
+
 			// Lift properties
-			this.direction        = 'stationary';	// stationary/up/down
-			this.currentFloor     = currentFloor;
-			this.destinationFloor = null;
-			// this.requests         = requests;	// array of floor requests (inside/outside)
-			this.speed            = 1000;
-			this.waitTimeout      = waitTimeout;	// time to wait before returning to floor 1
+			self.direction        = 'stationary';	// stationary/up/down
+			self.currentFloor     = currentFloor;
+			self.destinationFloor = null;
+			// self.requests         = requests;	// array of floor requests (inside/outside)
+			self.speed            = 1000;
+			self.waitTimeout      = waitTimeout;	// time to wait before returning to floor 1
 		}
 
 		Lift.prototype.getLiftStatus = function() {
 			console.log('---GET LIFT STATUS---');
-			console.log('Direction: ' + this.direction);
-			// console.log('Requests: ' + this.requests);
-			console.log('Wait timeout: ' + this.waitTimeout);
-			console.log('Current floor: ' + this.currentFloor);
-			console.log('Destination floor: ' + this.destinationFloor);
+			console.log('Direction: ' + self.direction);
+			// console.log('Requests: ' + self.requests);
+			console.log('Wait timeout: ' + self.waitTimeout);
+			console.log('Current floor: ' + self.currentFloor);
+			console.log('Destination floor: ' + self.destinationFloor);
 
 			var currentFloorLabel = document.getElementById('currentFloor');
-			currentFloorLabel.innerHTML = this.currentFloor;
+			currentFloorLabel.innerHTML = self.currentFloor;
 		}
 
 		Lift.prototype.pressButton = function(e) {
-			lift1.destinationFloor = e.target.innerHTML;
-			console.log('---BUTTON ' + lift1.destinationFloor + ' PRESSED---');
-			// this.origin = origin;	// inside/outside
+			self.destinationFloor = e.target.innerHTML;
+			console.log('---BUTTON ' + self.destinationFloor + ' PRESSED---');
+			// self.origin = origin;	// inside/outside
 			// console.log('---BUTTON ' + floor + ' PRESSED FROM THE ' + origin + '---');
 
-			lift1.moveLift();
+			self.moveLift();
 		}
 
 		Lift.prototype.moveLift = function() {
-			console.log('MOVING LIFT TO FLOOR: ' + this.destinationFloor);
+			console.log('MOVING LIFT TO FLOOR: ' + self.destinationFloor);
 
-			this.getDirection();
+			self.getDirection();
 
 			var timer = setInterval(function() {
-				if(lift1.direction == 'stationary') {
+				if(self.direction == 'stationary') {
 					clearInterval(timer);
 					console.log('---LIFT ARRIVED---');
-					lift1.getLiftStatus();
-					lift1.liftWaiting();
+					self.getLiftStatus();
+					self.liftWaiting();
 				} else {
-					if(lift1.direction == 'up') {
-						lift1.currentFloor++;
-						console.log(lift1.currentFloor);
-					} else if(lift1.direction == 'down') {
-						lift1.currentFloor--;
-						console.log(lift1.currentFloor);
+					if(self.direction == 'up') {
+						self.currentFloor++;
+						console.log(self.currentFloor);
+					} else if(self.direction == 'down') {
+						self.currentFloor--;
+						console.log(self.currentFloor);
 					}
-					lift1.getDirection();
-					lift1.getLiftStatus();
+					self.getDirection();
+					self.getLiftStatus();
 				}
-			}, this.speed);
+			}, self.speed);
 		}
 
 		Lift.prototype.getDirection = function() {
-			if(this.destinationFloor == this.currentFloor) {
-				this.direction = 'stationary';
-			} else if(this.destinationFloor > this.currentFloor) {
-				this.direction = 'up';
-			} else if(this.destinationFloor < this.currentFloor) {
-				this.direction = 'down';
+			if(self.destinationFloor == self.currentFloor) {
+				self.direction = 'stationary';
+			} else if(self.destinationFloor > self.currentFloor) {
+				self.direction = 'up';
+			} else if(self.destinationFloor < self.currentFloor) {
+				self.direction = 'down';
 			}
-			console.log('---LIFT IS MOVING ' + this.direction + '---');
+			console.log('---LIFT IS MOVING ' + self.direction + '---');
 		}
 
 		Lift.prototype.liftWaiting = function() {
-			if(this.destinationFloor != 1) {
+			if(self.destinationFloor != 1) {
 				setTimeout(function() {
 					console.log('---WAIT TIMEOUT REACHED. LIFT RETURNING TO FLOOR 1---');
-					lift1.destinationFloor = 1;
-					lift1.moveLift();
-				}, this.waitTimeout);
-			}
-		}
-
-		sleep = function(milliseconds) {
-			var start = new Date().getTime();
-			while((new Date().getTime() - start) < milliseconds) {
-				// do nothing
+					self.destinationFloor = 1;
+					self.moveLift();
+				}, self.waitTimeout);
 			}
 		}
 
@@ -119,7 +114,7 @@
 
 		var liftButtons = document.querySelectorAll('.liftButton');
 		for(var i = 0; i < liftButtons.length; i++) {
-			liftButtons[i].addEventListener("click", lift1.pressButton, false);
+			liftButtons[i].addEventListener("click", self.pressButton, false);
 		}
 	</script>
 </body>
