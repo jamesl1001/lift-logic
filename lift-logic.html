@@ -24,6 +24,7 @@
 			width: 100px;
 			height: 500px;
 			background: #EEE;
+			float: left;
 			position: relative;
 		}
 
@@ -63,6 +64,19 @@
 		.floor8 { bottom: 350px; }
 		.floor9 { bottom: 400px; }
 		.floor10 { bottom: 450px; }
+
+		#floor_labels {
+			border-collapse: collapse;
+			margin-left: 20px;
+			float: left;
+		}
+
+		#floor_labels td {
+			height: 49px;
+			border-top: 1px solid #CCC;
+			border-bottom: 1px solid #CCC;
+			padding: 0;
+		}
 	</style>
 </head>
 <body>
@@ -93,6 +107,19 @@
 			</div>
 			<div id="lift_shaft"></div>
 		</div>
+
+		<table id="floor_labels">
+			<tr><td>10</td></tr>
+			<tr><td>9</td></tr>
+			<tr><td>8</td></tr>
+			<tr><td>7</td></tr>
+			<tr><td>6</td></tr>
+			<tr><td>5</td></tr>
+			<tr><td>4</td></tr>
+			<tr><td>3</td></tr>
+			<tr><td>2</td></tr>
+			<tr><td>1</td></tr>
+		</table>
 	</div>
 
 	<script>
