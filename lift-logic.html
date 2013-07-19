@@ -5,27 +5,95 @@
 	<meta name="description" content="Emulate the logic of a lift."/>
 	<meta name="author" content="James Alexander Lee"/>
 	<title>Lift Logic</title>
+
+	<style>
+		.col {
+			width: 49%;
+			float: left;
+		}
+
+		.col-l {
+			margin-right: 1%;
+		}
+
+		.col-r {
+			margin-left: 1%;
+		}
+
+		#lift {
+			width: 100px;
+			height: 500px;
+			background: #EEE;
+			position: relative;
+		}
+
+		#lift_pod {
+			width: 80px;
+			height: 50px;
+			background: #999;
+			border-radius: 5px;
+			position: absolute;
+			left: 10px;
+			transition: bottom 1s;
+		}
+
+		#lift_currentFloor {
+			margin: 0;
+			color: #FFF;
+			font-family: Arial, sans;
+			font-size: 24px;
+			text-align: center;
+			line-height: 50px;
+		}
+
+		#lift_shaft {
+			width: 10px;
+			height: 100%;
+			background: #CCC;
+			margin: 0 auto;
+		}
+
+		.floor1 { bottom: 0; }
+		.floor2 { bottom: 50px; }
+		.floor3 { bottom: 100px; }
+		.floor4 { bottom: 150px; }
+		.floor5 { bottom: 200px; }
+		.floor6 { bottom: 250px; }
+		.floor7 { bottom: 300px; }
+		.floor8 { bottom: 350px; }
+		.floor9 { bottom: 400px; }
+		.floor10 { bottom: 450px; }
+	</style>
 </head>
 <body>
-	<h1>Lift Logic</h1>
-	<a href="https://github.com/jamesl1001/lift-logic" target="_blank">https://github.com/jamesl1001/lift-logic</a>
-	<p>Fed up with the lifts at work, I wanted to see how difficult it is to programme the logic of a lift.</p>
-	<p>Open console</p>
+	<div class="col col-l">
+		<h1>Lift Logic</h1>
+		<a href="https://github.com/jamesl1001/lift-logic" target="_blank">https://github.com/jamesl1001/lift-logic</a>
+		<p>Fed up with the lifts at work, I wanted to see how difficult it is to programme the logic of a lift.</p>
+		<p>Open console</p>
 
-	<hr>
+		<hr>
 
-	<p>Current floor: <span id="currentFloor"></span></p>
+		<button class="liftButton">1</button>
+		<button class="liftButton">2</button>
+		<button class="liftButton">3</button>
+		<button class="liftButton">4</button>
+		<button class="liftButton">5</button>
+		<button class="liftButton">6</button>
+		<button class="liftButton">7</button>
+		<button class="liftButton">8</button>
+		<button class="liftButton">9</button>
+		<button class="liftButton">10</button>
+	</div>
 
-	<button class="liftButton">1</button>
-	<button class="liftButton">2</button>
-	<button class="liftButton">3</button>
-	<button class="liftButton">4</button>
-	<button class="liftButton">5</button>
-	<button class="liftButton">6</button>
-	<button class="liftButton">7</button>
-	<button class="liftButton">8</button>
-	<button class="liftButton">9</button>
-	<button class="liftButton">10</button>
+	<div class="col col-r">
+		<div id="lift">
+			<div id="lift_pod">
+				<p id="lift_currentFloor"></p>
+			</div>
+			<div id="lift_shaft"></div>
+		</div>
+	</div>
 
 	<script>
 		function Lift(currentFloor, requests, waitTimeout) {
@@ -48,8 +116,10 @@
 			console.log('Current floor: ' + self.currentFloor);
 			console.log('Destination floor: ' + self.destinationFloor);
 
-			var currentFloorLabel = document.getElementById('currentFloor');
+			var currentFloorLabel = document.getElementById('lift_currentFloor');
 			currentFloorLabel.innerHTML = self.currentFloor;
+			var liftPodElement = document.getElementById('lift_pod');
+			liftPodElement.className = "floor" + self.currentFloor;
 		}
 
 		Lift.prototype.pressButton = function(e) {
