@@ -61,11 +61,14 @@
 		Lift.prototype.moveLift = function() {
 			console.log('MOVING LIFT TO FLOOR: ' + this.destinationFloor);
 
-			/*this.getDirection();
+			this.getDirection();
 
-			var timer = setInterval(function() {			// doesn't work
+			var timer = setInterval(function() {
 				if(lift1.direction == 'stationary') {
 					clearInterval(timer);
+					console.log('---LIFT ARRIVED---');
+					lift1.getLiftStatus();
+					lift1.liftWaiting();
 				} else {
 					if(lift1.direction == 'up') {
 						lift1.currentFloor++;
@@ -77,27 +80,7 @@
 					lift1.getDirection();
 					lift1.getLiftStatus();
 				}
-			}, this.speed);*/
-
-			do {
-				this.getDirection();
-				// setTimeout(function() {			// while and setTimeout doesn't play nicely together
-					if(this.direction == 'up') {
-						sleep(this.speed);			// blocks UI
-						this.currentFloor++;
-						console.log(this.currentFloor);
-					} else if(this.direction == 'down') {
-						sleep(this.speed);
-						this.currentFloor--;
-						console.log(this.currentFloor);
-					}
-				// }, this.speed);
-			} while(this.direction != 'stationary');
-
-			this.direction = 'stationary';
-			console.log('---LIFT ARRIVED---');
-			this.getLiftStatus();
-			this.liftWaiting();
+			}, this.speed);
 		}
 
 		Lift.prototype.getDirection = function() {
