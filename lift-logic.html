@@ -133,6 +133,8 @@
 			// self.requests         = requests;	// array of floor requests (inside/outside)
 			self.speed            = 1000;
 			self.waitTimeout      = waitTimeout;	// time to wait before returning to floor 1
+
+			self.liftWaitingTimeout = setTimeout(null, 0);	// declare blank timeout
 		}
 
 		Lift.prototype.getLiftStatus = function() {
@@ -150,6 +152,8 @@
 		}
 
 		Lift.prototype.pressButton = function(e) {
+			clearTimeout(self.liftWaitingTimeout);	// reset waitTimeout
+
 			self.destinationFloor = e.target.innerHTML;
 			console.log('---BUTTON ' + self.destinationFloor + ' PRESSED---');
 			// self.origin = origin;	// inside/outside
@@ -168,7 +172,11 @@
 					clearInterval(timer);
 					console.log('---LIFT ARRIVED---');
 					self.getLiftStatus();
-					self.liftWaiting();
+					if(self.currentFloor != 1) {
+						self.liftWaiting();
+					} else {
+						clearTimeout(self.liftWaitingTimeout);
+					}
 				} else {
 					if(self.direction == 'up') {
 						self.currentFloor++;
@@ -195,13 +203,11 @@
 		}
 
 		Lift.prototype.liftWaiting = function() {
-			if(self.destinationFloor != 1) {
-				setTimeout(function() {
-					console.log('---WAIT TIMEOUT REACHED. LIFT RETURNING TO FLOOR 1---');
-					self.destinationFloor = 1;
-					self.moveLift();
-				}, self.waitTimeout);
-			}
+			self.liftWaitingTimeout = setTimeout(function() {
+				console.log('---WAIT TIMEOUT REACHED. LIFT RETURNING TO FLOOR 1---');
+				self.destinationFloor = 1;
+				self.moveLift();
+			}, self.waitTimeout);
 		}
 
 
